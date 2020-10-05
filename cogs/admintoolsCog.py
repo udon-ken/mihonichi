@@ -76,7 +76,7 @@ class admintoolsCog(commands.Cog):
         human_count = all_count - bot_count
 
         header = 'メンバー数右の*はそのロールに対してのメンション許可\n'
-        header += 'オプションは0か1 0=少ない順 1=多い順  例：!roles 1\n\n'
+        header += f'オプションは0か1 0=少ない順 1=多い順  例：{self.bot.command_prefix}roles 1\n\n'
         header += f'全ロール数：{len(roles)}　全メンバー：{all_count}　人間：{human_count}　bot：{bot_count}\n'
 
         await ctx.send(f'```{header}```') # タイトル部
