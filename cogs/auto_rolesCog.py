@@ -22,8 +22,7 @@ class auto_rolesCog(commands.Cog):
         await asyncio.sleep(3)
         await member.add_roles(role)
 
-    @tasks.loop(seconds=180)
-    # @commands.command(aliases=['ro'])
+    @tasks.loop(seconds=3600)
     async def auto_roles(self):
         """定期的にロール操作
         チェックする性別、チェックするチャンネル、付与するロール

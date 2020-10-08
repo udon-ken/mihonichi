@@ -13,8 +13,6 @@ bot = commands.Bot(
     command_prefix='m:'
 )
 
-# bot.remove_command('help')
-
 # 本番環境も開発環境も同じ定数
 bot.BORDER_COLOR = 0x00aaaa
 bot.man_role_name = '男性'
@@ -26,7 +24,6 @@ bot.beginner_role_name = '🌱'
 
 bot.man_prof_ch_name = '男性プロフィール'
 bot.woman_prof_ch_name = '女性プロフィール'
-
 
 # 本番環境と開発環境で異なる定数
 # 開発環境

@@ -41,7 +41,7 @@ class admin_toolsCog(commands.Cog):
         cate_list = []
 
         for cate in ctx.author.guild.categories:
-            cate_list.append(re.sub('(【|】)', '', cate.name) + cate.id)
+            cate_list.append(re.sub('(【|】)', '', cate.name))
 
         title = f'● カテゴリ総数 {len(cate_list)}カテゴリ'
         result = '\n'.join(cate_list)

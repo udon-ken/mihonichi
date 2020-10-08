@@ -6,8 +6,8 @@ class move_categoryCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.min_length = 50
-        self.del_after = 60
+        self.min_length = 50 # 日報最低文字数
+        self.del_after = 60 # メッセージ削除秒数
 
     # 日報を書いたら日報のあるカテゴリをサーバ―情報カテ範囲内の最上位に移動する
     # 日報の定義
