@@ -9,10 +9,10 @@ class admin_toolsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # 掲載サーバーのカテゴリ一覧を出力（【】は削除）
     @commands.command(aliases=['sl'])
     # @commands.has_permissions(administrator=True)
     async def server_list(self, ctx):
+        """掲載サーバーのカテゴリ一覧を出力（【】は削除）"""
         if ctx.author.bot:
             return
         cate_list = []
@@ -32,10 +32,10 @@ class admin_toolsCog(commands.Cog):
         result = '\n'.join(cate_list)
         await ctx.send(f'{title}```{result}```')
 
-    # 全カテゴリ一覧を出力（【】は削除）
     @commands.command(aliases=['cl'])
     # @commands.has_permissions(administrator=True)
     async def cate_list(self, ctx):
+        """全カテゴリ一覧を出力（【】は削除）"""
         if ctx.author.bot:
             return
         cate_list = []
@@ -47,11 +47,11 @@ class admin_toolsCog(commands.Cog):
         result = '\n'.join(cate_list)
         await ctx.send(f'{title}```{result}```')
 
-    # ロールと人数表示（少し前のDynoの仕様に近い形） 
     # opt(bool)に3つの状態を持たせるのはトリッキーかも？
     @commands.command()
     # @commands.has_permissions(manage_roles=True)
     async def roles(self, ctx, opt: bool = None):
+        """ロールと人数表示（以前のDynoの仕様に近い形式） """
         if ctx.author.bot:
             return
 

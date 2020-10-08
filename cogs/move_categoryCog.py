@@ -6,7 +6,7 @@ class move_categoryCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.min_length = 20
+        self.min_length = 50
         self.del_after = 60
 
     # 日報を書いたら日報のあるカテゴリをサーバ―情報カテ範囲内の最上位に移動する
@@ -16,6 +16,7 @@ class move_categoryCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        """メッセージが投稿されたら自動処理"""
         if message.author.bot:
             return
         if not message.channel.name.endswith('日報'):
@@ -34,11 +35,14 @@ class move_categoryCog(commands.Cog):
             return
 
         if len(message.content) < self.min_length:
-            result = f'{self.min_length}文字以下ですのでカテゴリは移動しませんでした'
-            await message.channel.send(result, delete_after=self.del_after)
+            title = f'{message.author.mention}さん\n**投稿が{self.min_length}文字以下ですのでカテゴリは移動しませんでした**'
+            msg_body = '''
+書き直す場合は、今回の投稿を削除して新規に再投稿して下さい（編集した場合、システムに認識されずこのカテゴリが一番上に移動しません）。
+'''
+            await self.put_result(message.channel, title, msg_body)
             return
 
-        # これ以下、日報の体裁として問題ない投稿があったとして処理
+        # これ以下、日報の体裁としては問題ない投稿があったとして処理
         if message.channel.category.position == top_position:
             result = '※ 最上位でしたのでカテゴリ移動はできませんでした'
         else:
@@ -50,22 +54,28 @@ class move_categoryCog(commands.Cog):
                 result = '※ カテゴリを最上位に移動しました'
 
         title = f'{message.author.mention}さん\n**{result}**\n'
+        msg_body = '日報のご投稿ありがとうございました。'
+
+        await self.put_result(message.channel, title, msg_body)
+
+    async def put_result(self, ch, title, msg_body):
+        """処理結果の表示"""
         embed = discord.Embed(
-            description='日報のご投稿ありがとうございました。',
+            description=msg_body,
             color=self.bot.BORDER_COLOR
         )
         embed.add_field(
-            name='お願い',
+            name='【 お　願　い 】',
             inline=False,
             value=f'''
 日報ご投稿時には必ず<#{self.bot.bump_channel_id}>からbumpをお願いします。
-（前回bumpから2時間以上経過していない場合エラーになりますがその場合でも確認の為bumpしてエラーを出しておいて下さい）
+（前回bumpから2時間以上経過していない場合エラーになりますが、その場合でも確認の為bumpしてエラーを出しておいて下さい）
 '''
         )
         embed.set_footer(
             text=f'※ このメッセージは{self.del_after}秒後に自動削除されます'
         )
-        await message.channel.send(title, embed=embed, delete_after=self.del_after)
+        await ch.send(title, embed=embed, delete_after=self.del_after)
 
 
 def setup(bot):
