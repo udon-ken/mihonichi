@@ -28,6 +28,7 @@ class auto_rolesCog(commands.Cog):
         """定期的にロール操作
         チェックする性別、チェックするチャンネル、付与するロール
         性別ついてないとチェックしない事になるが、それは問題無しとする"""
+        print('auto_roles start')
         # 男性処理
         await self.role_operation(
             target_sex=self.bot.man_role_name,
