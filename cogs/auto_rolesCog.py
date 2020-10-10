@@ -24,10 +24,9 @@ class auto_rolesCog(commands.Cog):
 
     @tasks.loop(seconds=3600)
     async def auto_roles(self):
-        """定期的にロール操作
-        チェックする性別、チェックするチャンネル、付与するロール
-        性別ついてないとチェックしない事になるが、それは問題無しとする"""
-        print('auto_roles start')
+        """定期的にロールチェックしてプロフ・初心者ロールの整合性を取る
+        チェックする性別ロール名、チェックするチャンネル、付与するロールを渡すだけ
+        性別ついてないとチェックしない事になるが、それは逆に好都合"""
         # 男性処理
         await self.role_operation(
             target_sex=self.bot.man_role_name,
@@ -42,7 +41,8 @@ class auto_rolesCog(commands.Cog):
         )
 
     async def role_operation(self, target_sex, target_ch, target_role):
-        """プロフロール・初心者ロール操作"""
+        """プロフロール・初心者ロール操作
+        引数 チェックする性別ロール名、チェックするチャンネル、付与するロール"""
         try:
             GUILD = self.bot.GUILD # このボットが扱うたった一つのギルド（何回も出るので定義）
             no_prof_role = discord.utils.get(GUILD.roles, name=self.bot.not_prof_role_name) # プロフ無しロール
@@ -71,7 +71,7 @@ class auto_rolesCog(commands.Cog):
                     if no_prof_role in member.roles: # プロフ無しロールが付いてれば
                         await member.remove_roles(no_prof_role) # 削除
                 else: # プロフ無し
-                    if exist_prof_role in member.roles: # ロール有り
+                    if exist_prof_role in member.roles: # ロール有り（プロフ削除したという事）
                         await member.remove_roles(exist_prof_role) # 剥奪
                         count_remove += 1
                         print(f'－ {member} さんから{exist_prof_role}を削除しました')

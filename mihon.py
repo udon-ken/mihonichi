@@ -9,6 +9,14 @@ import platform
 #    status=discord.Status.
 # status=discord.Status.idle
 
+''' discord.py v1.5 and upper
+intent=discord.Intents.all()
+bot = commands.Bot(
+    command_prefix='m:',
+    intents=intents
+)
+'''
+
 bot = commands.Bot(
     command_prefix='m:'
 )
@@ -26,12 +34,14 @@ bot.man_prof_ch_name = '男性プロフィール'
 bot.woman_prof_ch_name = '女性プロフィール'
 
 # 本番環境と開発環境で異なる定数
+
 # 開発環境
 TOKEN = 'DISCORD_BOT_MIHON_TOKEN_T'
 GUILD_ID = 762847789259423754
 # 掲載サーバー用カテの区切りになるカテ
 bot.info_start_cate_id = 762847790354530331
 bot.info_end_cate_id = 762995177006170112
+bot.report_summary_ch_id = 764078688199245826
 bot.bump_channel_id = 762847792213262345
 
 # 本番環境
@@ -40,6 +50,7 @@ GUILD_ID = 641916844990529537
 # 掲載サーバー用カテの区切りになるカテ
 bot.info_start_cate_id = 653327583206703168
 bot.info_end_cate_id = 763583069163749406
+bot.report_summary_ch_id = 764498318620885062
 bot.bump_channel_id = 659638377494216717
 
 

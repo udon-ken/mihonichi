@@ -12,7 +12,7 @@ class admin_toolsCog(commands.Cog):
     @commands.command(aliases=['sl'])
     # @commands.has_permissions(administrator=True)
     async def server_list(self, ctx):
-        """掲載サーバーのカテゴリ一覧を出力（【】は削除）"""
+        """掲載サーバーのカテゴリ一覧を出力（【】は除去）"""
         if ctx.author.bot:
             return
         cate_list = []
@@ -35,7 +35,7 @@ class admin_toolsCog(commands.Cog):
     @commands.command(aliases=['cl'])
     # @commands.has_permissions(administrator=True)
     async def cate_list(self, ctx):
-        """全カテゴリ一覧を出力（【】は削除）"""
+        """全カテゴリ一覧を出力（【】は除去）"""
         if ctx.author.bot:
             return
         cate_list = []
@@ -51,7 +51,7 @@ class admin_toolsCog(commands.Cog):
     @commands.command()
     # @commands.has_permissions(manage_roles=True)
     async def roles(self, ctx, opt: bool = None):
-        """ロールと人数表示（以前のDynoの仕様に近い形式） """
+        """全ロール一覧とその人数表示（以前のDynoの仕様に近い形式） """
         if ctx.author.bot:
             return
 
@@ -75,11 +75,12 @@ class admin_toolsCog(commands.Cog):
         bot_count = sum(1 for member in ctx.guild.members if member.bot)
         human_count = all_count - bot_count
 
-        header = 'メンバー数右の*はそのロールに対してのメンション許可\n'
-        header += f'オプションは0か1 0=少ない順 1=多い順  例：{self.bot.command_prefix}roles 1\n\n'
-        header += f'全ロール数：{len(roles)}　全メンバー：{all_count}　人間：{human_count}　bot：{bot_count}\n'
-
-        await ctx.send(f'```{header}```') # タイトル部
+        summary = f'''
+メンバー数右の*はそのロールに対してのメンション許可\n
+オプションは0か1 0=少ない順 1=多い順  例：{self.bot.command_prefix}roles 1
+全ロール数：{len(roles)}　全メンバー：{all_count}　人間：{human_count}　bot：{bot_count}
+'''
+        await ctx.send(f'```{summary}```') # サマリー部
         for result in results: # 結果部分ループして出力
             await ctx.send(f'```{result}```')
 
