@@ -5,12 +5,12 @@ import re
 import utils.lib
 
 
-class admin_toolsCog(commands.Cog):
+class AdminTools(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(aliases=['sl'])
-    # @commands.has_permissions(administrator=True)
+    @commands.has_permissions(administrator=True)
     async def server_list(self, ctx):
         """掲載サーバーのカテゴリ一覧を出力（【】は除去）"""
         if ctx.author.bot:
@@ -33,7 +33,7 @@ class admin_toolsCog(commands.Cog):
         await ctx.send(f'{title}```{result}```')
 
     @commands.command(aliases=['cl'])
-    # @commands.has_permissions(administrator=True)
+    @commands.has_permissions(administrator=True)
     async def cate_list(self, ctx):
         """全カテゴリ一覧を出力（【】は除去）"""
         if ctx.author.bot:
@@ -49,7 +49,7 @@ class admin_toolsCog(commands.Cog):
 
     # opt(bool)に3つの状態を持たせるのはトリッキーかも？
     @commands.command()
-    # @commands.has_permissions(manage_roles=True)
+    @commands.has_permissions(manage_roles=True)
     async def roles(self, ctx, opt: bool = None):
         """全ロール一覧とその人数表示（以前のDynoの仕様に近い形式） """
         if ctx.author.bot:
@@ -93,4 +93,4 @@ class admin_toolsCog(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(admin_toolsCog(bot))
+    bot.add_cog(AdminTools(bot))

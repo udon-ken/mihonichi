@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import re
 
 
-class move_categoryCog(commands.Cog):
+class ReportingSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -106,4 +106,4 @@ class move_categoryCog(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(move_categoryCog(bot))
+    bot.add_cog(ReportingSystem(bot))

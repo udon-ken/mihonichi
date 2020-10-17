@@ -4,7 +4,7 @@ import asyncio
 from datetime import datetime, timedelta
 
 
-class auto_rolesCog(commands.Cog):
+class AutoRoles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.beginner_role_limit = 60 # 初心者とみなす日数
@@ -27,6 +27,9 @@ class auto_rolesCog(commands.Cog):
         """定期的にロールチェックしてプロフ・初心者ロールの整合性を取る
         チェックする性別ロール名、チェックするチャンネル、付与するロールを渡すだけ
         性別ついてないとチェックしない事になるが、それは逆に好都合"""
+        await self.bot.wait_until_ready()
+        await asyncio.sleep(1) # on_radyイベント中に取得する情報がある為、少し待つ
+
         # 男性処理
         await self.role_operation(
             target_sex=self.bot.man_role_name,
@@ -93,4 +96,4 @@ class auto_rolesCog(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(auto_rolesCog(bot))
+    bot.add_cog(AutoRoles(bot))
