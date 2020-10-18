@@ -104,7 +104,3 @@ class ReportingSystem(commands.Cog):
             text=f"Posted by {message.author.name}　{jst.strftime('%Y/%m/%d %H:%M')}"
         )
         await summary_ch.send(embed=embed)
-
-
-def setup(bot):
-    bot.add_cog(ReportingSystem(bot))

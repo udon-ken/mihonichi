@@ -13,8 +13,6 @@ class AdminTools(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def server_list(self, ctx):
         """掲載サーバーのカテゴリ一覧を出力（【】は除去）"""
-        if ctx.author.bot:
-            return
         cate_list = []
         is_start = False
 
@@ -36,8 +34,6 @@ class AdminTools(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def cate_list(self, ctx):
         """全カテゴリ一覧を出力（【】は除去）"""
-        if ctx.author.bot:
-            return
         cate_list = []
 
         for cate in ctx.author.guild.categories:
@@ -52,9 +48,6 @@ class AdminTools(commands.Cog):
     @commands.has_permissions(manage_roles=True)
     async def roles(self, ctx, opt: bool = None):
         """全ロール一覧とその人数表示（以前のDynoの仕様に近い形式） """
-        if ctx.author.bot:
-            return
-
         if opt is None:
             roles = sorted(ctx.guild.roles, reverse=True)
         else:
@@ -90,7 +83,3 @@ class AdminTools(commands.Cog):
             await utils.lib.send_error(ctx, f'ロール管理の権限が必要です\n\n{error}')
         if isinstance(error, commands.BadArgument):
             await utils.lib.send_error(ctx, f'オプション引数は0か1を指定して下さい（無しでも可）\n\n{error}')
-
-
-def setup(bot):
-    bot.add_cog(AdminTools(bot))

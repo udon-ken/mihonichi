@@ -34,15 +34,15 @@ bot.man_prof_ch_name = '男性プロフィール'
 bot.woman_prof_ch_name = '女性プロフィール'
 
 # 本番環境と開発環境で異なる定数
-'''
+
 # 開発環境
 TOKEN = 'DISCORD_BOT_MIHON_TOKEN_T'
 GUILD_ID = 762847789259423754
 bot.info_start_cate_id = 762847790354530331 # 区切りカテ（上）
-bot.info_end_cate_id =  # 区切りカテ（下）
+bot.info_end_cate_id = 762995177006170112 # 区切りカテ（下）
 bot.report_summary_ch_id = 764078688199245826
 bot.bump_channel_id = 762847792213262345
-'''
+
 # 本番環境
 TOKEN = 'DISCORD_BOT_MIHON_TOKEN'
 GUILD_ID = 641916844990529537
@@ -51,10 +51,9 @@ bot.info_end_cate_id = 763583069163749406 # 区切りカテ（下）
 bot.report_summary_ch_id = 764498318620885062
 bot.bump_channel_id = 659638377494216717
 
+
 # cogのロード
-bot.load_extension('cogs.admin_toolsCog')
-bot.load_extension('cogs.reporting_systemCog')
-bot.load_extension('cogs.auto_rolesCog')
+bot.load_extension('cogs._extentions')
 
 
 @bot.event

@@ -31,19 +31,19 @@ class AutoRoles(commands.Cog):
         await asyncio.sleep(1) # on_radyイベント中に取得する情報がある為、少し待つ
 
         # 男性処理
-        await self.role_operation(
+        await self._role_operation(
             target_sex=self.bot.man_role_name,
             target_ch=self.bot.man_prof_ch_name,
             target_role=self.bot.man_exist_prof_role_name
         )
         # 女性処理
-        await self.role_operation(
+        await self._role_operation(
             target_sex=self.bot.woman_role_name,
             target_ch=self.bot.woman_prof_ch_name,
             target_role=self.bot.woman_exist_prof_role_name
         )
 
-    async def role_operation(self, target_sex, target_ch, target_role):
+    async def _role_operation(self, target_sex, target_ch, target_role):
         """プロフロール・初心者ロール操作
         引数 チェックする性別ロール名、チェックするチャンネル、付与するロール"""
         try:
@@ -93,7 +93,3 @@ class AutoRoles(commands.Cog):
             print(f'{prof_ch.name}チェック完了 追加：{count_add}名　削除：{count_remove}名　total：{len(profs)}名')
         except Exception as e:
             print(f'error on role_operation\n{e}')
-
-
-def setup(bot):
-    bot.add_cog(AutoRoles(bot))
