@@ -5,36 +5,12 @@ from datetime import datetime, timedelta
 import json
 import platform
 
-# import logging
-# logging.basicConfig(level=logging.INFO)
-#    status=discord.Status.
-# status=discord.Status.idle
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix='m:', intents=intents)
 
-''' discord.py v1.5 and upper
-intent=discord.Intents.all()
-bot = commands.Bot(
-    command_prefix='m:',
-    intents=intents
-)
-'''
-
-bot = commands.Bot(
-    command_prefix='m:'
-)
-
-# 本番環境も開発環境も同じ定数
-bot.BORDER_COLOR = 0x00aaaa
-bot.man_role_name = '男性'
-bot.woman_role_name = '女性'
-bot.not_prof_role_name = 'プロフ【未】'
-bot.man_exist_prof_role_name = 'プロフ【男】'
-bot.woman_exist_prof_role_name = 'プロフ【女】'
-bot.beginner_role_name = '🌱'
-
-bot.man_prof_ch_name = '男性プロフィール'
-bot.woman_prof_ch_name = '女性プロフィール'
-
-# 本番環境と開発環境で異なる定数
+# 設定ファイル読み込み（本番用も開発用も同じものだけ）
+with open("mihon_config.json", "r", encoding="utf-8_sig") as f:
+    bot.config = json.load(f)
 
 # 開発環境
 TOKEN = 'DISCORD_BOT_MIHON_TOKEN_T'
@@ -44,6 +20,7 @@ bot.info_end_cate_id = 762995177006170112 # 区切りカテ（下）
 bot.report_summary_ch_id = 764078688199245826
 bot.bump_channel_id = 762847792213262345
 
+# 本番環境と開発環境で異なる定数
 # 本番環境
 TOKEN = 'DISCORD_BOT_MIHON_TOKEN'
 GUILD_ID = 641916844990529537
@@ -51,7 +28,6 @@ bot.info_start_cate_id = 653327583206703168 # 区切りカテ（上）
 bot.info_end_cate_id = 763583069163749406 # 区切りカテ（下）
 bot.report_summary_ch_id = 764498318620885062
 bot.bump_channel_id = 659638377494216717
-
 
 # cogのロード
 bot.load_extension('cogs._extentions')

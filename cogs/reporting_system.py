@@ -66,7 +66,7 @@ class ReportingSystem(commands.Cog):
         """処理結果の表示"""
         embed = discord.Embed(
             description=msg_body,
-            color=self.bot.BORDER_COLOR
+            color=self.bot.config['border_color']
         )
         embed.add_field(
             name='【 お　願　い 】',
@@ -97,7 +97,7 @@ class ReportingSystem(commands.Cog):
             title=ch_name,
             url=message.jump_url,
             description=body,
-            color=self.bot.BORDER_COLOR
+            color=self.bot.config['border_color']
         )
         embed.set_footer(
             icon_url=message.author.avatar_url_as(static_format='png'),

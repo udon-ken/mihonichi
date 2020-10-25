@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 class AutoRoles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.beginner_role_limit = 60 # 初心者とみなす日数
+        self.beginner_limit = 60 # 初心者とみなす日数
         self.auto_roles.start()
 
     @commands.Cog.listener()
@@ -15,11 +15,11 @@ class AutoRoles(commands.Cog):
         """join時に初心者ロールを付ける"""
         if member.bot:
             return
-        if datetime.utcnow() - member.created_at > timedelta(days=self.beginner_role_limit):
+        if datetime.utcnow() - member.created_at > timedelta(days=self.beginner_limit):
             return
-        if not(role := discord.utils.get(member.guild, name=self.bot.beginner_role_name)):
+        if not(role := discord.utils.get(member.guild, name=self.bot.config['beginner_role_name'])):
             return
-        await asyncio.sleep(3)
+        await asyncio.sleep(3) # 他ボットとの競合回避
         await member.add_roles(role)
 
     @tasks.loop(seconds=3600)
@@ -32,15 +32,15 @@ class AutoRoles(commands.Cog):
 
         # 男性処理
         await self._role_operation(
-            target_sex=self.bot.man_role_name,
-            target_ch=self.bot.man_prof_ch_name,
-            target_role=self.bot.man_exist_prof_role_name
+            target_sex=self.bot.config['man_role_name'],
+            target_ch=self.bot.config['man_prof_ch_name'],
+            target_role=self.bot.config['man_exist_prof_role_name']
         )
         # 女性処理
         await self._role_operation(
-            target_sex=self.bot.woman_role_name,
-            target_ch=self.bot.woman_prof_ch_name,
-            target_role=self.bot.woman_exist_prof_role_name
+            target_sex=self.bot.config['woman_role_name'],
+            target_ch=self.bot.config['woman_prof_ch_name'],
+            target_role=self.bot.config['woman_exist_prof_role_name']
         )
 
     async def _role_operation(self, target_sex, target_ch, target_role):
@@ -48,10 +48,10 @@ class AutoRoles(commands.Cog):
         引数 チェックする性別ロール名、チェックするチャンネル、付与するロール"""
         try:
             GUILD = self.bot.GUILD # このボットが扱うたった一つのギルド（何回も出るので定義）
-            no_prof_role = discord.utils.get(GUILD.roles, name=self.bot.not_prof_role_name) # プロフ無しロール
-            beginner_role = discord.utils.get(GUILD.roles, name=self.bot.beginner_role_name) # 初心者ロール
+            no_prof_role = discord.utils.get(GUILD.roles, name=self.bot.config['no_prof_role_name']) # プロフ無しロール
+            beginner_role = discord.utils.get(GUILD.roles, name=self.bot.config['beginner_role_name']) # 初心者ロール
             # 以下、引数で渡されたもの
-            sex_role = discord.utils.get(GUILD.roles, name=target_sex) # 対象性別
+            sex_role = discord.utils.get(GUILD.roles, name=target_sex) # 対象性別ロール
             prof_ch = discord.utils.get(GUILD.channels, name=target_ch) # プロフch
             exist_prof_role = discord.utils.get(GUILD.roles, name=target_role) # プロフ有ロール
 
@@ -81,7 +81,7 @@ class AutoRoles(commands.Cog):
                     if no_prof_role not in member.roles: # プロフ無しロールが無ければ
                         await member.add_roles(no_prof_role) # 付与
                 # 初心者ロール操作
-                if datetime.utcnow() - member.created_at > timedelta(days=self.beginner_role_limit): #初心者期間じゃない
+                if datetime.utcnow() - member.created_at > timedelta(days=self.beginner_limit): #初心者期間じゃない
                     if beginner_role in member.roles: # 初心者ロールがある
                         await member.remove_roles(beginner_role) # 削除
                         print(f'－ {member} さんから{beginner_role}を削除しました')

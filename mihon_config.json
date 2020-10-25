@@ -1,0 +1,12 @@
+{
+    "border_color": 43690,
+    "man_role_name": "男性",
+    "woman_role_name": "女性",
+    "no_prof_role_name": "プロフ【未】",
+    "man_exist_prof_role_name": "プロフ【男】",
+    "woman_exist_prof_role_name": "プロフ【女】",
+    "beginner_role_name": "🌱",
+
+    "man_prof_ch_name": "男性プロフィール",
+    "woman_prof_ch_name": "女性プロフィール"
+}
