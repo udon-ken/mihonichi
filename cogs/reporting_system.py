@@ -3,28 +3,30 @@ from discord.ext import commands
 from datetime import datetime, timedelta
 import re
 
+REPORT_MIN_LENGTH = 60 # 日報最低文字数
+MESSAGE_LIFETIME = 60 # 受け付け完了メッセージ削除秒数
+
 
 class ReportingSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.min_length = 60 # 日報最低文字数
-        self.del_after = 60 # メッセージ削除秒数
     '''
     ・日報を書いたら日報のあるカテゴリをサーバ―情報カテ範囲内の最上位に移動する
     ・日報の先頭から規定文字数をサマリーとしてサマリー用チャンネルに転記する
     ・日報の定義
       - チャンネル名が'日報'で終わるチャンネルに書かれたメッセージ
-      - min_length文字以上のメッセージ
+      - REPORT_MIN_LENGTH 文字以上のメッセージ
     '''
     @commands.Cog.listener()
     async def on_message(self, message):
         """メッセージが投稿されたら自動処理"""
         if message.author.bot:
             return
+        # if message.author == self.bot.user: # これ無いと無限ループになるよ
+        #    return
         if not message.channel.name.endswith('日報'):
             return
-
         # サーバー情報カテの一番上と一番下のpositionを求める（つまり、仕切りカテの直下と直上）
         if not (upper_cate := message.channel.guild.get_channel(self.bot.info_start_cate_id)):
             return
@@ -32,13 +34,11 @@ class ReportingSystem(commands.Cog):
         if not (lower_cate := message.channel.guild.get_channel(self.bot.info_end_cate_id)):
             return
         bottom_position = lower_cate.position - 1
-        # 現在のpostionが範囲外なら無視
-        current_position = message.channel.category.position
-        if current_position < top_position or current_position > bottom_position:
+        # 現在のpostionが範囲外（つまりチャンネル名が日報だがサーバー日報とは違う）なら無視
+        if not(top_position <= message.channel.category.position <= bottom_position):
             return
-
-        if len(message.content) < self.min_length:
-            title = f'{message.author.mention}さん\n**投稿が{self.min_length}文字以下ですのでカテゴリは移動しませんでした**'
+        if len(message.content) < REPORT_MIN_LENGTH:
+            title = f'{message.author.mention}さん\n**投稿が{REPORT_MIN_LENGTH}文字以下ですのでカテゴリは移動しませんでした**'
             msg_body = '''
 書き直す場合は、今回の投稿を削除して新規に再投稿して下さい（編集した場合、システムに認識されずこのカテゴリが一番上に移動しません）。
 '''
@@ -69,7 +69,7 @@ class ReportingSystem(commands.Cog):
             color=self.bot.config['border_color']
         )
         embed.add_field(
-            name='【 お　願　い 】',
+            name='【　お　願　い　】',
             inline=False,
             value=f'''
 日報ご投稿時には必ず<#{self.bot.bump_channel_id}>からbumpをお願いします。
@@ -77,9 +77,9 @@ class ReportingSystem(commands.Cog):
 '''
         )
         embed.set_footer(
-            text=f'※ このメッセージは{self.del_after}秒後に自動削除されます'
+            text=f'※ このメッセージは{MESSAGE_LIFETIME}秒後に自動削除されます'
         )
-        await ch.send(title, embed=embed, delete_after=self.del_after)
+        await ch.send(title, embed=embed, delete_after=MESSAGE_LIFETIME)
 
     async def put_report_summary(self, message):
         """日報サマリー（最新日報）への投稿 日報最低文字数分を出力"""
@@ -89,7 +89,7 @@ class ReportingSystem(commands.Cog):
         jst = datetime.utcnow() + timedelta(hours=9)
         ch_name = message.channel.name
 
-        summary = message.content[:self.min_length]
+        summary = message.content[:REPORT_MIN_LENGTH]
         summary = re.sub('\n{2,}', '\n', summary)
 
         body = f'```{summary} ……```[...続きはこちらから]({message.jump_url})'
