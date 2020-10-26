@@ -3,11 +3,12 @@ from discord.ext import commands, tasks
 import asyncio
 from datetime import datetime, timedelta
 
+BEGINNER_LIMIT = 60 # 初心者とみなす日数
+
 
 class AutoRoles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.beginner_limit = 60 # 初心者とみなす日数
         self.auto_roles.start()
 
     @commands.Cog.listener()
@@ -15,7 +16,7 @@ class AutoRoles(commands.Cog):
         """join時に初心者ロールを付ける"""
         if member.bot:
             return
-        if datetime.utcnow() - member.created_at > timedelta(days=self.beginner_limit):
+        if datetime.utcnow() - member.created_at > timedelta(days=BEGINNER_LIMIT):
             return
         if not(role := discord.utils.get(member.guild, name=self.bot.config['beginner_role_name'])):
             return
@@ -81,7 +82,7 @@ class AutoRoles(commands.Cog):
                     if no_prof_role not in member.roles: # プロフ無しロールが無ければ
                         await member.add_roles(no_prof_role) # 付与
                 # 初心者ロール操作
-                if datetime.utcnow() - member.created_at > timedelta(days=self.beginner_limit): #初心者期間じゃない
+                if datetime.utcnow() - member.created_at > timedelta(days=BEGINNER_LIMIT): #初心者期間じゃない
                     if beginner_role in member.roles: # 初心者ロールがある
                         await member.remove_roles(beginner_role) # 削除
                         print(f'－ {member} さんから{beginner_role}を削除しました')
