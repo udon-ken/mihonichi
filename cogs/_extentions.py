@@ -8,4 +8,4 @@ def setup(bot):
     bot.add_cog(AutoRoles(bot))
     bot.add_cog(ReportingSystem(bot))
 
-# ファイル名先頭の_は位置を調整したいだけの理由
+# このファイルのファイル名先頭のアンダースコアは位置を調整したいだけの理由
