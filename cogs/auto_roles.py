@@ -91,6 +91,6 @@ class AutoRoles(commands.Cog):
                         await member.add_roles(beginner_role) # 追加
                         print(f'＋ {member} さんに{beginner_role}を付与しました')
 
-            print(f'{prof_ch.name}チェック完了 追加：{count_add}名　削除：{count_remove}名　total：{len(profs)}名')
+            print(f'{prof_ch.name}チェック完了 追加：{count_add}名　削除：{count_remove}名　total：{len(exist_prof_role.members)}名')
         except Exception as e:
             print(f'error on role_operation\n{e}')
