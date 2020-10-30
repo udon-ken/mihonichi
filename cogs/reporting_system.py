@@ -6,25 +6,27 @@ import re
 REPORT_MIN_LENGTH = 60 # 日報最低文字数
 MESSAGE_LIFETIME = 60 # 受け付け完了メッセージ削除秒数
 
+'''
+・適正な日報を書いた場合の動作
+　- 日報のあるカテゴリをサーバ―情報カテ範囲内の最上位に移動する
+　- 日報の先頭から規定文字数をサマリーとしてサマリー用チャンネルに転記する
+・適正な日報の定義
+　- 適正なサーバー日報チャンネルに書かれている事
+    - 文字数が REPORT_MIN_LENGTH 以上である事
+'''
+
 
 class ReportingSystem(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    '''
-    ・日報を書いたら日報のあるカテゴリをサーバ―情報カテ範囲内の最上位に移動する
-    ・日報の先頭から規定文字数をサマリーとしてサマリー用チャンネルに転記する
-    ・日報の定義
-      - チャンネル名が'日報'で終わるチャンネルに書かれたメッセージ
-      - REPORT_MIN_LENGTH 文字以上のメッセージ
-    '''
     @commands.Cog.listener()
     async def on_message(self, message):
         """メッセージが投稿されたら自動処理"""
         if message.author.bot:
             return
-        # if message.author == self.bot.user: # これ無いと無限ループになるよ
-        #    return
+        if isinstance(message.channel, discord.DMChannel): # DM拾うとchannel.nameが無いのでエラーになる
+            return
         if not message.channel.name.endswith('日報'):
             return
         # サーバー情報カテの一番上と一番下のpositionを求める（つまり、仕切りカテの直下と直上）
@@ -42,7 +44,7 @@ class ReportingSystem(commands.Cog):
             msg_body = '''
 書き直す場合は、今回の投稿を削除して新規に再投稿して下さい（編集した場合、システムに認識されずこのカテゴリが一番上に移動しません）。
 '''
-            await self.put_result(message.channel, title, msg_body)
+            await self._put_result(message.channel, title, msg_body)
             return
 
         # これ以下、日報の体裁としては問題ない投稿があったとして処理
@@ -59,10 +61,10 @@ class ReportingSystem(commands.Cog):
         title = f'{message.author.mention}さん\n**{result}**\n'
         msg_body = '日報のご投稿ありがとうございました。'
 
-        await self.put_result(message.channel, title, msg_body)
-        await self.put_report_summary(message)
+        await self._put_result(message.channel, title, msg_body)
+        await self._put_report_summary(message)
 
-    async def put_result(self, ch, title, msg_body):
+    async def _put_result(self, ch, title, msg_body):
         """処理結果の表示"""
         embed = discord.Embed(
             description=msg_body,
@@ -81,7 +83,7 @@ class ReportingSystem(commands.Cog):
         )
         await ch.send(title, embed=embed, delete_after=MESSAGE_LIFETIME)
 
-    async def put_report_summary(self, message):
+    async def _put_report_summary(self, message):
         """日報サマリー（最新日報）への投稿 日報最低文字数分を出力"""
         if not(summary_ch := self.bot.get_channel(self.bot.report_summary_ch_id)):
             return
