@@ -6,6 +6,7 @@ import json
 import platform
 
 intents = discord.Intents.all()
+intents.typing = False  # typingを受け取らないように
 bot = commands.Bot(command_prefix='m:', intents=intents)
 
 # 設定ファイル読み込み（本番用も開発用も同じものだけ）
