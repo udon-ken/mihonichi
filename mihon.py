@@ -15,13 +15,14 @@ with open("mihon_config.json", "r", encoding="utf-8_sig") as f:
 
 # 本番環境と開発環境で異なる定数
 # 開発環境
+'''
 TOKEN = 'DISCORD_BOT_MIHON_TOKEN_T'
 GUILD_ID = 762847789259423754
 bot.info_start_cate_id = 762847790354530331 # 区切りカテ（上）
 bot.info_end_cate_id = 762995177006170112 # 区切りカテ（下）
 bot.report_summary_ch_id = 764078688199245826
 bot.bump_channel_id = 762847792213262345
-
+'''
 # 本番環境
 TOKEN = 'DISCORD_BOT_MIHON_TOKEN'
 GUILD_ID = 641916844990529537
